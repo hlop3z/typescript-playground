@@ -1,0 +1,28 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "libFile": "./dist/lib.js",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build-lib": "vite build && rollup -c"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.1",
+    "@babel/plugin-transform-react-jsx": "^7.19.0",
+    "@babel/preset-env": "^7.19.1",
+    "vite": "^3.1.0",
+    "vite-plugin-babel": "^1.1.2"
+  },
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.1.0",
+    "mithril": "^2.2.2",
+    "rollup": "^2.79.1"
+  }
+}

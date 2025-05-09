@@ -1,0 +1,21 @@
+{
+  "name": "psycript",
+  "version": "0.2.2",
+  "type": "module",
+  "license": "MIT",
+  "initFile": "src/index.js",
+  "main": "dist/psycript.mjs",
+  "module": "dist/psycript.mjs",
+  "jsdelivr": "dist/psycript.mjs",
+  "unpkg": "dist/psycript.mjs",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "test": "node test/test.js"
+  },
+  "files": [
+    "dist"
+  ]
+}

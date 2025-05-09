@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Events Example</title>
+    <style>
+      #send,
+      #recv,
+      #other {
+        padding: 10px;
+        border: 1px solid black;
+        margin: 10px;
+      }
+    </style>
+
+    <link href="https://unpkg.com/xtyle-css@latest" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="lt">Header</header>
+
+    <!-- Main -->
+    <main class="lm lc-l lc-r lc-t lc-b">
+      Application
+      <!-- Demo -->
+      <div id="send">Click me to trigger custom event</div>
+      <div id="recv">Waiting for events...</div>
+      <div id="other">Keep Me...</div>
+    </main>
+
+    <!-- Drawers -->
+    <aside class="ll lc-t lc-b ld ta-r open">Left</aside>
+    <aside class="lr lc-t lc-b ld open">Right</aside>
+
+    <!-- Drawers (mini) -->
+    <aside class="ll lc-t lc-b ld mini open">Left-Mini</aside>
+    <aside class="lr lc-t lc-b ld mini open">Right-Mini</aside>
+
+    <!-- Footer -->
+    <footer class="lb">Footer</footer>
+    <script src="./index.js" type="text/javascript"></script>
+  </body>
+</html>

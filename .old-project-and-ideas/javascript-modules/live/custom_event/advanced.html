@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Events Example</title>
+  </head>
+  <body>
+    <div id="send">Click me to trigger custom event</div>
+    <div id="recv">Waiting for events...</div>
+    <div id="other">Keep Me...</div>
+
+    <script>
+      const EVENT = {
+        __name__: "animalfound",
+        __elements__: [],
+        listen(element, callback) {
+          this.__elements__.push({ element, callback });
+        },
+        dispatch(detail) {
+          const event = new CustomEvent(this.__name__, {
+            detail,
+            bubbles: true,
+            // Allows events to pass the shadow DOM barrier.
+            composed: true,
+            cancelable: true,
+          });
+          window.dispatchEvent(event);
+        },
+        init() {
+          const self = this;
+
+          window.addEventListener(this.__name__, (e) => {
+            this.__elements__.forEach((x) => x.callback(e.detail));
+          });
+
+          // Callback function to execute when mutations are observed
+          const callback = (mutationList, observer) => {
+            for (const mutation of mutationList) {
+              if (mutation.type === "childList") {
+                mutation.removedNodes.forEach((rmNode) => {
+                  const cleaned = self.__elements__.filter(
+                    (x) => x.element !== rmNode || !rmNode.contains(x.element)
+                  );
+                  self.__elements__ = cleaned;
+                });
+                //;
+              }
+            }
+          };
+
+          // Create an observer instance linked to the callback function
+          const observer = new MutationObserver(callback);
+
+          // Select the node that will be observed for mutations
+          const targetNode = window.document.body;
+
+          // Options for the observer (which mutations to observe)
+          const config = { childList: true, subtree: true };
+
+          // Start observing the target node for configured mutations
+          observer.observe(targetNode, config);
+        },
+      };
+
+      // Start
+      EVENT.init();
+
+      // Select the target element
+      const element = document.getElementById("send");
+      const recv = document.getElementById("recv");
+      const other = document.getElementById("other");
+
+      EVENT.listen(recv, () => console.log("one"));
+      EVENT.listen(recv, () => console.log("two"));
+      EVENT.listen(other, (args) => console.log(args));
+
+      console.log(recv.isConnected);
+
+      // Dispatch events when the `send` element is clicked
+      element.addEventListener("click", () => {
+        EVENT.dispatch({
+          text: "Hello World",
+        });
+      });
+
+      setTimeout(() => {
+        recv.remove();
+        console.log(recv.isConnected);
+      }, 1000);
+    </script>
+  </body>
+</html>

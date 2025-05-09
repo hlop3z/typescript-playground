@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Events Example</title>
+  </head>
+  <body>
+    <div id="myElement">Click me to trigger custom event</div>
+
+    <script>
+      // Creating a custom event
+      const event = new CustomEvent("myCustomEvent", {
+        detail: {
+          message: "Hello, this is a custom event!",
+          time: new Date(),
+        },
+      });
+
+      // Selecting the target element
+      const element = document.getElementById("myElement");
+
+      // Adding an event listener for the custom event
+      element.addEventListener("myCustomEvent", (event) => {
+        console.log("Custom event received:", event.detail);
+      });
+
+      // Adding a click event listener to dispatch the custom event
+      element.addEventListener("click", () => {
+        element.dispatchEvent(event);
+      });
+    </script>
+  </body>
+</html>

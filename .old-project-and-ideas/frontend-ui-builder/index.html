@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Core -->
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="./vite.svg" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<!-- Title -->
+		<title>UI Designer</title>
+		<link
+			rel="stylesheet"
+			href="//cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css"
+		/>
+	</head>
+	<body>
+		<div id="app"></div>
+
+		<!-- Prettier -->
+		<script src="https://unpkg.com/prettier@2.7.1/standalone.js"></script>
+		<script src="https://unpkg.com/prettier@2.7.1/parser-graphql.js"></script>
+		<script src="https://unpkg.com/prettier@2.7.1/parser-babel.js"></script>
+		<script>
+			const Format = {
+				graphql(code) {
+					return prettier.format(code, {
+						parser: 'graphql',
+						plugins: prettierPlugins,
+					});
+				},
+				javascript(code) {
+					return prettier.format(code, {
+						parser: 'babel',
+						plugins: prettierPlugins,
+					});
+				},
+				html(code) {
+					return prettier.format(code, {
+						parser: 'babel',
+						plugins: prettierPlugins,
+					});
+				},
+				json(code) {
+					let value = code;
+					try {
+						value = JSON.stringify(JSON.parse(value), null, '\t');
+					} catch (e) {
+						//pass
+					}
+					return value;
+				},
+			};
+			window.$Format = Format;
+		</script>
+
+		<!-- Monaco-Editor -->
+		<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.34.0/min/vs/loader.js"></script>
+		<script>
+			require.config({
+				paths: {
+					vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.34.0/min/vs',
+				},
+			});
+		</script>
+
+		<!-- Application -->
+		<script type="module" src="/src/main.js"></script>
+	</body>
+</html>
