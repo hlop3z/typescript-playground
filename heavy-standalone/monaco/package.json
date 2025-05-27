@@ -1,0 +1,30 @@
+{
+  "name": "monaco-standalone",
+  "version": "0.1.0",
+  "description": "Standalone Monaco Editor with all language workers and features",
+  "main": "dist/monaco.min.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --mode production && rm dist/index.html",
+    "dev": "webpack-dev-server --config webpack.config.js --open --mode development",
+    "clean": "rm dist/index.html"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "monaco-editor": "0.52.2"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "7.1.2",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.3",
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "style-loader": "4.0.0",
+    "webpack": "5.99.7",
+    "webpack-cli": "6.0.1",
+    "webpack-dev-server": "5.2.1",
+    "webpack-manifest-plugin": "^5.0.1"
+  }
+}

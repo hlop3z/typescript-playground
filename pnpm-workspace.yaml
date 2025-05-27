@@ -1,0 +1,5 @@
+packages:
+  #- "apps/*" # Frontend or backend apps (e.g., playground, admin, api-server)
+  - "packages/*" # Optional: standalone modules or tools
+  - "!**/dist" # Exclude build outputs
+  - "!**/node_modules" # Always exclude

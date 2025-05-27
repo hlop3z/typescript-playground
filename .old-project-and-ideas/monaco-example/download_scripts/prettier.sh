@@ -53,11 +53,11 @@ main() {
     readonly SCRIPTS=(
         "standalone.js"
         "parser-babel.js"
-        "parser-typescript.js"
         "parser-html.js"
         "parser-postcss.js"
         "parser-markdown.js"
         "parser-yaml.js"
+        #"parser-typescript.js"
     )
 
     # Download each script

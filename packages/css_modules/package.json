@@ -1,0 +1,24 @@
+{
+  "name": "css_modules",
+  "module": "index.ts",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --mode production && rm dist/index.html && rm dist/manifest.json",
+    "dev": "webpack-dev-server --config webpack.config.js --open --mode development"
+  },
+  "dependencies": {
+    "postcss": "^8.5.3",
+    "postcss-modules-local-by-default": "^4.2.0",
+    "postcss-modules-scope": "^3.2.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "7.1.2",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.3",
+    "style-loader": "4.0.0",
+    "webpack": "5.99.8",
+    "webpack-cli": "6.0.1",
+    "webpack-dev-server": "5.2.1",
+    "webpack-manifest-plugin": "^5.0.1"
+  }
+}
