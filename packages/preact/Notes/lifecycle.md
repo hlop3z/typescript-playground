@@ -39,7 +39,7 @@ export function useLifecycleHooks(
 
 ---
 
-### 🚀 Example Usage with Async Cleanup + Deps
+## 🚀 Example Usage with Async Cleanup + Deps
 
 ```jsx
 // components/LifecycleDemo.js
