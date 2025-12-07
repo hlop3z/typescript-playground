@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Babel + SASS + Terser Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #c586c0;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #808080;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border: none;
+            color: #808080;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #3c3c3c;
+            color: #d4d4d4;
+        }
+
+        .tab:hover:not(.active) {
+            background: #333;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #9cdcfe;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            background: #252526;
+            color: #d4d4d4;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            resize: vertical;
+            tab-size: 2;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #569cd6;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            background: #0e639c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1177bb;
+        }
+
+        button:active {
+            background: #0d5a8c;
+        }
+
+        button.secondary {
+            background: #3c3c3c;
+        }
+
+        button.secondary:hover {
+            background: #4a4a4a;
+        }
+
+        select {
+            padding: 8px 12px;
+            font-size: 14px;
+            background: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #569cd6;
+        }
+
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-group label {
+            font-weight: normal;
+            color: #d4d4d4;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .status.success {
+            background: #2d4a3e;
+            color: #4ec9b0;
+        }
+
+        .status.error {
+            background: #4a2d2d;
+            color: #f48771;
+            white-space: pre-wrap;
+        }
+
+        .info {
+            background: #2d3a4a;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #9cdcfe;
+        }
+
+        .info code {
+            background: #1e1e1e;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .size-info {
+            font-size: 12px;
+            color: #808080;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Babel + SASS + Terser Demo</h1>
+    <p class="subtitle">Transform TypeScript/JSX, compile SCSS, and minify code</p>
+
+    <div class="info">
+        Using <code>tsx_scss.min.js</code> bundle containing Babel, SASS compiler, CSSO, and Terser.
+        Loaded from <code>./__budles__/tsx_scss.min.js</code>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="babel">Babel (TS/JSX)</button>
+        <button class="tab" data-tab="sass">SASS/SCSS</button>
+        <button class="tab" data-tab="terser">Terser (Minify JS)</button>
+    </div>
+
+    <!-- Babel Tab -->
+    <div id="babel-tab" class="tab-content active">
+        <div class="controls">
+            <button id="babel-transform-btn">Transform</button>
+
+            <div class="option-group">
+                <label for="babel-preset">Presets:</label>
+                <select id="babel-preset">
+                    <option value="typescript">TypeScript</option>
+                    <option value="react">React (JSX)</option>
+                    <option value="both">TypeScript + React</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <input type="checkbox" id="babel-minify">
+                <label for="babel-minify">Minify with Terser</label>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="panel">
+                <div class="panel-header">
+                    <label for="babel-input">TypeScript / JSX Input</label>
+                </div>
+                <textarea id="babel-input" spellcheck="false">// TypeScript + React example
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+interface Props {
+    users: User[];
+    onSelect: (user: User) => void;
+}
+
+const UserList: React.FC<Props> = ({ users, onSelect }) => {
+    const [search, setSearch] = React.useState<string>('');
+
+    const filteredUsers = React.useMemo(() => {
+        return users.filter(user =>
+            user.name.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [users, search]);
+
+    return (
+        <div className="user-list">
+            <input
+                type="text"
+                placeholder="Search users..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+            <ul>
+                {filteredUsers.map((user) => (
+                    <li key={user.id} onClick={() => onSelect(user)}>
+                        <span>{user.name}</span>
+                        <small>{user.email}</small>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default UserList;</textarea>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <label for="babel-output">JavaScript Output</label>
+                </div>
+                <textarea id="babel-output" readonly spellcheck="false"></textarea>
+                <div id="babel-status" class="status" style="display: none;"></div>
+                <div id="babel-size" class="size-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SASS Tab -->
+    <div id="sass-tab" class="tab-content">
+        <div class="controls">
+            <button id="sass-compile-btn">Compile SCSS</button>
+
+            <div class="option-group">
+                <label for="sass-style">Output Style:</label>
+                <select id="sass-style">
+                    <option value="expanded">Expanded</option>
+                    <option value="compressed">Compressed</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <input type="checkbox" id="sass-csso">
+                <label for="sass-csso">Optimize with CSSO</label>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="panel">
+                <div class="panel-header">
+                    <label for="sass-input">SCSS Input</label>
+                </div>
+                <textarea id="sass-input" spellcheck="false">// Variables
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$border-radius: 8px;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin button-style($bg-color) {
+    background-color: $bg-color;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: darken($bg-color, 10%);
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Styles
+.container {
+    font-family: $font-stack;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+    .header {
+        @include flex-center;
+        background: linear-gradient(135deg, $primary-color, $secondary-color);
+        padding: 40px;
+        border-radius: $border-radius;
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+
+        .btn-primary {
+            @include button-style($primary-color);
+        }
+
+        .btn-secondary {
+            @include button-style($secondary-color);
+        }
+    }
+
+    // Nested selectors with parent reference
+    .card {
+        background: white;
+        border-radius: $border-radius;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+
+        &-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        &-body {
+            padding: 20px 0;
+        }
+
+        &:hover {
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+    }
+}</textarea>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <label for="sass-output">CSS Output</label>
+                </div>
+                <textarea id="sass-output" readonly spellcheck="false"></textarea>
+                <div id="sass-status" class="status" style="display: none;"></div>
+                <div id="sass-size" class="size-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terser Tab -->
+    <div id="terser-tab" class="tab-content">
+        <div class="controls">
+            <button id="terser-minify-btn">Minify</button>
+
+            <div class="option-group">
+                <input type="checkbox" id="terser-mangle" checked>
+                <label for="terser-mangle">Mangle names</label>
+            </div>
+
+            <div class="option-group">
+                <input type="checkbox" id="terser-compress" checked>
+                <label for="terser-compress">Compress</label>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="panel">
+                <div class="panel-header">
+                    <label for="terser-input">JavaScript Input</label>
+                </div>
+                <textarea id="terser-input" spellcheck="false">// A simple utility library
+class EventEmitter {
+    constructor() {
+        this.events = {};
+    }
+
+    on(event, callback) {
+        if (!this.events[event]) {
+            this.events[event] = [];
+        }
+        this.events[event].push(callback);
+        return this;
+    }
+
+    off(event, callback) {
+        if (!this.events[event]) return this;
+        this.events[event] = this.events[event].filter(cb => cb !== callback);
+        return this;
+    }
+
+    emit(event, ...args) {
+        if (!this.events[event]) return this;
+        this.events[event].forEach(callback => {
+            callback.apply(this, args);
+        });
+        return this;
+    }
+
+    once(event, callback) {
+        const onceWrapper = (...args) => {
+            callback.apply(this, args);
+            this.off(event, onceWrapper);
+        };
+        return this.on(event, onceWrapper);
+    }
+}
+
+function debounce(func, wait, immediate) {
+    let timeout;
+    return function executedFunction() {
+        const context = this;
+        const args = arguments;
+        const later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
+
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    };
+}
+
+export { EventEmitter, debounce, throttle };</textarea>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <label for="terser-output">Minified Output</label>
+                </div>
+                <textarea id="terser-output" readonly spellcheck="false"></textarea>
+                <div id="terser-status" class="status" style="display: none;"></div>
+                <div id="terser-size" class="size-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the tsx_scss bundle -->
+    <script src="./__budles__/tsx_scss.min.js"></script>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+
+        // Utility functions
+        function showStatus(elementId, message, isError = false) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = 'status ' + (isError ? 'error' : 'success');
+            el.style.display = 'block';
+        }
+
+        function showSize(elementId, original, output) {
+            const el = document.getElementById(elementId);
+            const ratio = ((1 - output.length / original.length) * 100).toFixed(1);
+            el.textContent = `Original: ${original.length} bytes | Output: ${output.length} bytes | Saved: ${ratio}%`;
+        }
+
+        // Babel transformation
+        document.getElementById('babel-transform-btn').addEventListener('click', async () => {
+            const input = document.getElementById('babel-input').value;
+            const preset = document.getElementById('babel-preset').value;
+            const shouldMinify = document.getElementById('babel-minify').checked;
+
+            const presets = [];
+            if (preset === 'typescript' || preset === 'both') {
+                presets.push(['typescript', { isTSX: true, allExtensions: true }]);
+            }
+            if (preset === 'react' || preset === 'both') {
+                presets.push(['react']);
+            }
+
+            try {
+                const startTime = performance.now();
+                let result = Babel.transform(input, {
+                    presets: presets,
+                    filename: 'input.tsx'
+                });
+
+                let output = result.code;
+
+                if (shouldMinify && typeof Terser !== 'undefined') {
+                    const minified = await Terser.minify(output);
+                    if (minified.error) throw minified.error;
+                    output = minified.code;
+                }
+
+                const endTime = performance.now();
+
+                document.getElementById('babel-output').value = output;
+                showStatus('babel-status', `Transformed successfully in ${(endTime - startTime).toFixed(2)}ms`);
+                showSize('babel-size', input, output);
+            } catch (error) {
+                document.getElementById('babel-output').value = '';
+                showStatus('babel-status', `Error: ${error.message}`, true);
+                document.getElementById('babel-size').textContent = '';
+            }
+        });
+
+        // SASS compilation (uses callback-based sass.js API)
+        document.getElementById('sass-compile-btn').addEventListener('click', () => {
+            const input = document.getElementById('sass-input').value;
+            const style = document.getElementById('sass-style').value;
+            const shouldOptimize = document.getElementById('sass-csso').checked;
+
+            // Check if Sass is available
+            if (typeof Sass === 'undefined') {
+                showStatus('sass-status', 'Error: Sass compiler not loaded. Make sure the bundle includes Sass.', true);
+                return;
+            }
+
+            const startTime = performance.now();
+
+            // sass.js uses callback-based API: Sass.compile(source, [options], callback)
+            const options = {
+                style: style === 'compressed' ? Sass.style.compressed : Sass.style.expanded
+            };
+
+            Sass.compile(input, options, function(result) {
+                const endTime = performance.now();
+
+                if (result.status !== 0) {
+                    document.getElementById('sass-output').value = '';
+                    showStatus('sass-status', `Error: ${result.message} (line ${result.line})`, true);
+                    document.getElementById('sass-size').textContent = '';
+                    return;
+                }
+
+                let output = result.text;
+
+                if (shouldOptimize && typeof csso !== 'undefined') {
+                    try {
+                        output = csso.minify(output).css;
+                    } catch (e) {
+                        // CSSO optimization failed, use unoptimized output
+                    }
+                }
+
+                document.getElementById('sass-output').value = output;
+                showStatus('sass-status', `Compiled successfully in ${(endTime - startTime).toFixed(2)}ms`);
+                showSize('sass-size', input, output);
+            });
+        });
+
+        // Terser minification
+        document.getElementById('terser-minify-btn').addEventListener('click', async () => {
+            const input = document.getElementById('terser-input').value;
+            const mangle = document.getElementById('terser-mangle').checked;
+            const compress = document.getElementById('terser-compress').checked;
+
+            try {
+                const startTime = performance.now();
+
+                if (typeof Terser === 'undefined') {
+                    throw new Error('Terser not loaded. Make sure the bundle includes Terser.');
+                }
+
+                const result = await Terser.minify(input, {
+                    mangle: mangle,
+                    compress: compress
+                });
+
+                if (result.error) throw result.error;
+
+                const endTime = performance.now();
+
+                document.getElementById('terser-output').value = result.code;
+                showStatus('terser-status', `Minified successfully in ${(endTime - startTime).toFixed(2)}ms`);
+                showSize('terser-size', input, result.code);
+            } catch (error) {
+                document.getElementById('terser-output').value = '';
+                showStatus('terser-status', `Error: ${error.message}`, true);
+                document.getElementById('terser-size').textContent = '';
+            }
+        });
+
+        // Initial transforms
+        document.getElementById('babel-transform-btn').click();
+    </script>
+</body>
+
+</html>
